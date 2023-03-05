@@ -33,6 +33,9 @@ SOFTWARE.
 import { LightningElement, api, wire, track } from 'lwc';
 import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import { updateRecord, getRecordUi } from 'lightning/uiRecordApi';
+import { getRecord } from 'lightning/uiRecordApi';
+
+import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import {
     ScenarioState,
     ScenarioLayout,
@@ -52,11 +55,16 @@ export default class PathAssistant extends LightningElement {
     // current object api name
     @api objectApiName;
 
+    @api childApiName;
+
     // current record's id
     @api recordId;
 
     // picklist field's API name used to render the path assistant
     @api picklistField;
+
+    // field of the child record to show the path for
+    @api childRecordField;
 
     // closed OK step value. When selected will render a green progress bar
     @api closedOk;
@@ -76,8 +84,6 @@ export default class PathAssistant extends LightningElement {
     // show/hide the modal to select a closed step
     @track openModal = false;
 
-    // current object metadata info
-    @track objectInfo;
 
     // current record
     @track record;
@@ -90,6 +96,13 @@ export default class PathAssistant extends LightningElement {
 
     // step selected by the user
     @track selectedStepValue;
+
+    @wire(getObjectInfo, { objectApiName: '$childApiName' })
+    objectInfoChild;
+
+
+    // current child record Id
+    @track _recordId;
 
     // current record's record type id
     _recordTypeId;
@@ -163,22 +176,22 @@ export default class PathAssistant extends LightningElement {
 
         if (data && data.records[this.recordId]) {
             // set the record
-            this.record = data.records[this.recordId];
 
+            this.record = getRecord(data.records[this.recordId].fields[this.childRecordField]);
+            this._recordId = data.records[this.recordId].fields[this.childRecordField];
             // set the object info
-            this.objectInfo = data.objectInfos[this.objectApiName];
 
             // set the current record type
             const rtId = getRecordTypeId(this.record);
             this._recordTypeId = rtId
                 ? rtId
-                : getMasterRecordTypeId(this.objectInfo);
+                : getMasterRecordTypeId(this.objectInfoChild);
         }
     }
 
     // load picklist values available for current record type
     @wire(getPicklistValuesByRecordType, {
-        objectApiName: '$objectApiName',
+        objectApiName: '$childApiName',
         recordTypeId: '$_recordTypeId'
     })
     wiredPicklistValues({ error, data }) {
@@ -320,7 +333,7 @@ export default class PathAssistant extends LightningElement {
         // format the record for update call
         let toUpdate = {
             fields: {
-                Id: this.recordId
+                Id: this._recordId
             }
         };
 
@@ -450,7 +463,7 @@ export default class PathAssistant extends LightningElement {
 
     // returns the label of the picklist field used to render the path
     get picklistFieldLabel() {
-        return this.objectInfo.fields[this.picklistField].label;
+        return this.objectInfoChild.fields[this.picklistField].label;
     }
 
     // true if current record reached a closed step
@@ -470,7 +483,7 @@ export default class PathAssistant extends LightningElement {
 
     // true when all required data is loaded
     get isLoaded() {
-        const res = this.record && this.objectInfo && this.possibleSteps;
+        const res = this.record && this.objectInfoChild && this.possibleSteps;
         if (res && !this._currentScenario) {
             // when fully loaded initialize the action
             this._setCurrentScenario();
