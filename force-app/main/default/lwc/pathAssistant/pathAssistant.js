@@ -33,7 +33,6 @@ SOFTWARE.
 import { LightningElement, api, wire, track } from 'lwc';
 import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
 import { updateRecord, getRecordUi } from 'lightning/uiRecordApi';
-import { getRecord } from 'lightning/uiRecordApi';
 
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
 import {
