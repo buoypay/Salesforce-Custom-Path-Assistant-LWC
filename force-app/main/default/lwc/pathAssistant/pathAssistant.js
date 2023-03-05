@@ -479,7 +479,7 @@ export default class PathAssistant extends LightningElement {
 
     // returns the label of the picklist field used to render the path
     get picklistFieldLabel() {
-        return this.objectInfoChild.fields[this.picklistField].label;
+        return this.objectInfoChild.data.fields[this.picklistField].label;
     }
 
     // true if current record reached a closed step
