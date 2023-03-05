@@ -177,8 +177,25 @@ export default class PathAssistant extends LightningElement {
         if (data && data.records[this.recordId]) {
             // set the record
 
-            this.record = getRecord(data.records[this.recordId].fields[this.childRecordField]);
             this._recordId = data.records[this.recordId].fields[this.childRecordField];
+            // set the object info
+        }
+    }
+
+    @wire(getRecordUi, {
+        recordIds: '$_recordId',
+        layoutTypes: 'Full',
+        modes: 'View'
+    })
+    wiredRecordChildUI({ error, data }) {
+        if (error) {
+            this.errorMsg = error.body.message;
+        }
+
+        if (data && data.records[this._recordId]) {
+            // set the record
+
+            this.record = data.records[this._recordId];
             // set the object info
 
             // set the current record type
