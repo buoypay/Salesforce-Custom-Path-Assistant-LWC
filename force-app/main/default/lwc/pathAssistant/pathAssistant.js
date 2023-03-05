@@ -176,7 +176,7 @@ export default class PathAssistant extends LightningElement {
         if (data && data.records[this.recordId]) {
             // set the record
 
-            this._recordId = data.records[this.recordId].fields[this.childRecordField];
+            this._recordId = data.records[this.recordId].fields[this.childRecordField].value;
             // set the object info
         }
     }
