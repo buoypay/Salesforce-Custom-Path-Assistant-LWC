@@ -213,6 +213,9 @@ export function getMasterRecordTypeId(objectInfo) {
  * @param {Object} record SObject record
  */
 export function getRecordTypeId(record) {
+    if(record.recordTypeId){
+        return record.recordTypeId;
+    }
     if (record.recordTypeInfo) {
         return record.recordTypeInfo.recordTypeId;
     }
