@@ -389,7 +389,7 @@ export default class PathAssistant extends LightningElement {
     _getCombinedErrorMessage(error) {
         let errorMesage = '';
         if(error.body.output && error.body.output.errors && error.body.output.errors.length > 0) {
-            for (err in error.body.output.errors) {
+            for (const err of error.body.output.errors) {
                 errorMesage +=  err.message;
             }
         } else {
