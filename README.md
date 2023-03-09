@@ -2,6 +2,12 @@
 
 A custom path assistant built using only Lightning Web Components
 
+
+<a href="https://githubsfdeploy.herokuapp.com?owner=buoypay&repo=Salesforce-Custom-Path-Assistant-LWC">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png">
+</a>
+
 ## Reasons
 
 Main reason for this project is that currently is not possible to replicate the same look and feel of the Opportunity Sales Path using custom Path Assistants.
