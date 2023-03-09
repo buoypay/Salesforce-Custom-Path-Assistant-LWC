@@ -32,6 +32,7 @@ SOFTWARE.
  */
 import { LightningElement, api, wire, track } from 'lwc';
 import { getPicklistValuesByRecordType } from 'lightning/uiObjectInfoApi';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { updateRecord, getRecordUi } from 'lightning/uiRecordApi';
 
 import { getObjectInfo } from 'lightning/uiObjectInfoApi';
@@ -370,12 +371,31 @@ export default class PathAssistant extends LightningElement {
                 this.spinner = false;
             })
             .catch(error => {
-                this.errorMsg = error.body.message;
+
                 this.spinner = false;
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Failed to change stage!',
+                        message: this._getCombinedErrorMessage(error),
+                        variant: 'error',
+                    }),
+                );
             });
 
         // reset component state
         this._resetComponentState();
+    }
+
+    _getCombinedErrorMessage(error) {
+        let errorMesage = '';
+        if(error.body.output && error.body.output.errors && error.body.output.errors.length > 0) {
+            for (err in error.body.output.errors) {
+                errorMesage +=  err.message;
+            }
+        } else {
+            errorMesage = error.body.message;
+        }
+        return errorMesage;
     }
 
     /* ========== GETTER METHODS ========== */
