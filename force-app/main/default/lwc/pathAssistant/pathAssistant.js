@@ -342,9 +342,6 @@ export default class PathAssistant extends LightningElement {
      * Reset the component state
      */
     _resetComponentState() {
-        this.record = undefined;
-        this.selectedStepValue = undefined;
-        this._selectedClosedStepValue = undefined;
         this._currentScenario = undefined;
     }
 
@@ -370,6 +367,7 @@ export default class PathAssistant extends LightningElement {
             .then(() => {
                 // close spinner
                 this.spinner = false;
+                this._resetComponentState();
                 this.dispatchEvent(new RefreshEvent());
             })
             .catch(error => {
