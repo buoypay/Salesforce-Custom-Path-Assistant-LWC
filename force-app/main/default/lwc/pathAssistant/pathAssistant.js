@@ -369,6 +369,7 @@ export default class PathAssistant extends LightningElement {
             .then(() => {
                 // close spinner
                 this.spinner = false;
+                this._resetComponentState();
             })
             .catch(error => {
 
@@ -383,7 +384,6 @@ export default class PathAssistant extends LightningElement {
             });
 
         // reset component state
-        this._resetComponentState();
     }
 
     _getCombinedErrorMessage(error) {
