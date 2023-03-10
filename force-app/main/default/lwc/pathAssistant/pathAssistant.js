@@ -369,7 +369,7 @@ export default class PathAssistant extends LightningElement {
             .then(() => {
                 // close spinner
                 this.spinner = false;
-                this._resetComponentState();
+                //this._resetComponentState();
             })
             .catch(error => {
 
