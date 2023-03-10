@@ -342,6 +342,8 @@ export default class PathAssistant extends LightningElement {
      * Reset the component state
      */
     _resetComponentState() {
+        this.selectedStepValue = undefined;
+        this._selectedClosedStepValue = undefined;
         this._currentScenario = undefined;
     }
 
